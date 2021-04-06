@@ -40,6 +40,7 @@
 </div>
 
 ## Table of Contents
+
 - [Features](#features)
 - [FAQ](#faq)
 - [Installation](#installation)
@@ -47,31 +48,36 @@
 - [Contributing](#contributions)
 
 ## Features
-- __Free Plan:__ With no compromise on features your pantry can utilize our software for free.
-- __Realtime Editing:__ our realtime backend allows multiple users to modify the same data concurrently without problems.
-- __Mobile Support:__ With first class mobile support you can expect a no-compromise mobile experience
-- __Intuitive Interface:__ With an intuitive interface that is easy to navigate you can find what you are looking for in seconds!
-- __Reports:__ Easily generate the reports your pantry needs. Immediately export PDFs with high level
-overviews of your operations, or export an excel spreadsheet with more refined statistics.
+
+- **Free Plan:** With no compromise on features your pantry can utilize our software for free.
+- **Realtime Editing:** our realtime backend allows multiple users to modify the same data concurrently without problems.
+- **Mobile Support:** With first class mobile support you can expect a no-compromise mobile experience
+- **Intuitive Interface:** With an intuitive interface that is easy to navigate you can find what you are looking for in seconds!
+- **Reports:** Easily generate the reports your pantry needs. Immediately export PDFs with high level
+  overviews of your operations, or export an excel spreadsheet with more refined statistics.
 
 ## FAQ
+
 ### How is it free?
+
 PlanBook is free because of generous contributions from organizations.
 PlanBook is a minimalistic service that takes a minimalist approach to infrastructure.
 We only use the resources we require.
 
 ### How can I donate?
+
 You can donate to PlanBook by sponsoring us or donating via paypal.
 If it's more convenient, it's also possible to configure monthly donations directly
 from the website.
 
-
 ### How do I use it on mobile?
+
 To use it on mobile, simply navigate to the same url as you would use on your desktop.
 PlanBook intelligently detects your mobile device and adapts accordingly.
 We also have a mobile app in the works which you can track here.
 
 ## Installation
+
 To install PlanBook for your organization, the easiest way is to visit our website.
 After visiting our website you can create your organization and manage your users effortlessly.
 If you would like to configure PlanBook further it is possible to clone the repository
@@ -79,7 +85,7 @@ and run it locally or on your own servers. The procedure to deploy locally is de
 
 ## Support
 
-If at any point while using PlanBook you encounter a bug, want to see a new feature 
+If at any point while using PlanBook you encounter a bug, want to see a new feature
 or have a question, the easiest way to get support is to file an issue here on GitHub
 or email us directly at support@planbook.org.
 
@@ -87,5 +93,5 @@ or email us directly at support@planbook.org.
 
 Before working on a contribution to PlanBook, write a feature proposal on github. If the feature
 proposal is approved you may start development. Before submitting a pull-request, ensure that
-the linter and unit tests successfully run. Follow any directions associated with the code 
+the linter and unit tests successfully run. Follow any directions associated with the code
 review, and your feature will likely be merged.

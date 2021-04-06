@@ -27,7 +27,5 @@
 		"@sveltejs/adapter-vercel": "next"
 	},
 	"type": "module",
-	"dependencies": {
-
-	}
+	"dependencies": {}
 }

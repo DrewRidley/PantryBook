@@ -1,4 +1,4 @@
-const sveltePreprocess = require("svelte-preprocess");
+const sveltePreprocess = require('svelte-preprocess');
 const vercel = require('@sveltejs/adapter-vercel');
 const pkg = require('./package.json');
 
@@ -7,10 +7,10 @@ module.exports = {
 	preprocess: [
 		sveltePreprocess({
 			defaults: {
-				style: "postcss",
+				style: 'postcss'
 			},
 			postcss: true
-		}),
+		})
 	],
 	kit: {
 		// By default, `npm run build` will create a standard Node app.
