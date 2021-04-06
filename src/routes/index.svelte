@@ -75,7 +75,7 @@
 		<div>
 			<button
 				type="button"
-				on:click="{async (e) => {
+				on:click="{async () => {
 						await goto('/register');
 					}}"
 				href="/register"
@@ -85,7 +85,7 @@
 			</button>
 			<button
 				type="button"
-				on:click="{async (e) => {
+				on:click="{async () => {
 						await goto('/login');
 					}}"
 				href="/login"
@@ -383,3 +383,8 @@
 	</div>
 </div>
 </body>
+
+
+<script>
+	import { goto } from '$app/navigation';
+</script>
