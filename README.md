@@ -1,42 +1,91 @@
-# create-svelte
+<h1 align="center">PantryBook</h1>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+<div align="center">
+  🍲 🍲 🍲  🥄  🥄 
+</div>
+<div align="center">
+  <strong>Pantry Management</strong>
+</div>
+<div align="center">
+  A versatile webapp for managing food-pantry operations.
+</div>
 
-## Creating a project
+<br />
 
-If you're seeing this, you've probably already done this step. Congrats!
+<div align="center">
+  <!-- Stability -->
+  <a href="https://nodejs.org/api/documentation.html#documentation_stability_index">
+    <img src="https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square"
+      alt="API stability" />
+  </a>
+  <!-- Build Status -->
+  <!-- Test Coverage -->
+  <!-- Downloads -->
+    <img src="https://img.shields.io/github/downloads/drewdapilot/pantrybook/total"
+      alt="Download" />
+  <!-- Standard -->
+  <a href="https://standardjs.com">
+    <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square"
+      alt="Standard" />
+  </a>
+</div>
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+<div align="center">
+  <sub>Built with ❤︎ by
+  <a href="https://github.com/DrewDaPilot">Drew Ridley</a> and
+  <a href="https://github.com/drewdapilot/pantrybook/graphs/contributors">
+    contributors
+  </a>
+</sub>
+</div>
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+## Table of Contents
+- [Features](#features)
+- [FAQ](#faq)
+- [Installation](#installation)
+- [Support](#support)
+- [Contributing](#contributions)
 
-> Note: the `@next` is temporary
+## Features
+- __Free Plan:__ With no compromise on features your pantry can utilize our software for free.
+- __Realtime Editing:__ our realtime backend allows multiple users to modify the same data concurrently without problems.
+- __Mobile Support:__ With first class mobile support you can expect a no-compromise mobile experience
+- __Intuitive Interface:__ With an intuitive interface that is easy to navigate you can find what you are looking for in seconds!
+- __Reports:__ Easily generate the reports your pantry needs. Immediately export PDFs with high level
+overviews of your operations, or export an excel spreadsheet with more refined statistics.
 
-## Developing
+## FAQ
+### How is it free?
+PlanBook is free because of generous contributions from organizations.
+PlanBook is a minimalistic service that takes a minimalist approach to infrastructure.
+We only use the resources we require.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### How can I donate?
+You can donate to PlanBook by sponsoring us or donating via paypal.
+If it's more convenient, it's also possible to configure monthly donations directly
+from the website.
 
-```bash
-npm run dev
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### How do I use it on mobile?
+To use it on mobile, simply navigate to the same url as you would use on your desktop.
+PlanBook intelligently detects your mobile device and adapts accordingly.
+We also have a mobile app in the works which you can track here.
 
-## Building
+## Installation
+To install PlanBook for your organization, the easiest way is to visit our website.
+After visiting our website you can create your organization and manage your users effortlessly.
+If you would like to configure PlanBook further it is possible to clone the repository
+and run it locally or on your own servers. The procedure to deploy locally is described here.
 
-Svelte apps are built with _adapters_, which optimise your project for deployment to different environments.
+## Support
 
-By default, `npm run build` will generate a Node app that you can run with `node build`. To use a different adapter, add it to the `devDependencies` in `package.json` making sure to specify the version as `next` and update your `svelte.config.cjs` to [specify your chosen adapter](https://kit.svelte.dev/docs#configuration-adapter). The following official adapters are available:
+If at any point while using PlanBook you encounter a bug, want to see a new feature 
+or have a question, the easiest way to get support is to file an issue here on GitHub
+or email us directly at support@planbook.org.
 
-- [@sveltejs/adapter-node](https://github.com/sveltejs/kit/tree/master/packages/adapter-node)
-- [@sveltejs/adapter-static](https://github.com/sveltejs/kit/tree/master/packages/adapter-static)
-- [@sveltejs/adapter-netlify](https://github.com/sveltejs/kit/tree/master/packages/adapter-netlify)
-- [@sveltejs/adapter-vercel](https://github.com/sveltejs/kit/tree/master/packages/adapter-vercel)
-- ...more soon
+## Contributions
 
-[See the adapter documentation for more detail](https://kit.svelte.dev/docs#adapters)
+Before working on a contribution to PlanBook, write a feature proposal on github. If the feature
+proposal is approved you may start development. Before submitting a pull-request, ensure that
+the linter and unit tests successfully run. Follow any directions associated with the code 
+review, and your feature will likely be merged.
