@@ -198,7 +198,7 @@
 			</h2>
 			<p class="text-base text-gray-700 md:text-lg">
 				PantryBook is the pantry software that takes care of
-				everything, so you don’t have to. We handle the complexity and provide you with the information you need in a quick, intuitive manner.
+				everything, so you don’t have to. We handle the complexity and provide you with the information you need in a quick, intuitive interface.
 			</p>
 		</div>
 	</div>
