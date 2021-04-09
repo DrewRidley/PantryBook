@@ -21,6 +21,7 @@ module.exports = {
 		target: '#svelte',
 
 		vite: {
+			//optimizeDeps: Object.keys(pkg.dependencies || {}),
 			ssr: {
 				noExternal: Object.keys(pkg.dependencies || {})
 			}

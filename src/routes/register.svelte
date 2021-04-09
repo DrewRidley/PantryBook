@@ -16,17 +16,20 @@
   import { page } from '$app/stores';
   import { browser } from '$app/env';
 
-  let firebase;
-  let db;
+  let newInvitee;
 
+  let db;
+  let firebase;
+
+  //Run client-side imports dynamically on the client. This will not perform tree shaking.
   onMount(async () => {
     if(browser) {
       firebase = (await import("../lib/fb.js")).default;
       db = firebase.firestore();
     }
-  });
+  })
 
-  let step = 0;
+  let step = 2;
   let form = {
     name: '',
     size: 0,
@@ -174,7 +177,7 @@
       <div class="pb-6 mt-6">
         <Step
           label="Organization Registration Steps"
-          length={4}
+          length={3}
           selected={step}
         />
       </div>
@@ -300,7 +303,7 @@
                 autocomplete="current-password"
                 required
                 class="{form.errors.password != ''
-									? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 border-red-500 sm:text-sm'
+									? ' text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 border-red-500 sm:text-sm'
 									: 'focus:ring-indigo-500 focus:border-indigo-500'} appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm"
                 bind:value={form.password}
               />
@@ -417,7 +420,7 @@
               Invite users to your organization:
             </h1>
             <h3 class="text-center mt-2">
-              To jumpstart your installation, it is recommended to invite other collaborators.
+              To jumpstart your installation, it is recommended to invite other collaborators. You can always do this later.
             </h3>
           </div>
           <div>
@@ -431,13 +434,40 @@
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                 </div>
-                <input type="text" name="invitee" id="invitee" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full py-2 pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="you@example.com">
+                <input 
+                  type="text" 
+                  name="invitee" 
+                  id="invitee" 
+                  class=" focus:ring-indigo-500 focus:border-indigo-500 block w-full py-2 pl-10 sm:text-sm border-gray-500 rounded-md" 
+                  bind:value={newInvitee}
+                  placeholder="joe@example.com">
               </div>
-              <button type="button" id="addNewInvitee" class="w-2/12 ml-4  mt-1 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white text-center bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ">
+              <button 
+                type="button" 
+                id="addNewInvitee" 
+                class="w-2/12 ml-4  mt-1 py-2 border border-transparent text-xs font-medium rounded shadow-sm 
+                text-white text-center bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
+                on:click={() => {
+                  form.invitees = [...form.invitees, newInvitee]
+                }}>
                 Add
               </button>
             </div>
-
+          </div>
+          <div>
+            
+            <div class="pt-2 items-center">
+              {#each form.invitees as inv}
+                <div class="rounded-md bg-indigo-50 py-2 px-2 my-2 max-w-sm text-center mx-12 ">
+                    <h3 class="text-sm font-semibold w-10/12 inline-block">
+                      {inv}
+                    </h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-5 w-5 cursor-pointer" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+              {/each}
+            </div>
           </div>
         </form>
       {/if}
