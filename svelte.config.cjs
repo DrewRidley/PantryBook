@@ -17,7 +17,6 @@ module.exports = {
 		// You can create optimized builds for different platforms by
 		// specifying a different adapter
 		adapter: vercel(),
-
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
 

@@ -1,6 +1,6 @@
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import firebase from 'firebase/app';
 import Cookies from 'js-cookie';
 
 let firebaseCfg = {
@@ -12,9 +12,9 @@ let firebaseCfg = {
 	appId: '1:470048751220:web:936d8d290a7807faf71b21'
 };
 
-firebase.initializeApp(firebaseCfg);
+firebase.default.initializeApp(firebaseCfg);
 
-firebase.auth().onIdTokenChanged(async (user) => {
+firebase.default.auth().onIdTokenChanged(async (user) => {
 	if (user) {
 		const token = await user.getIdToken();
 		Cookies.set('token', token);
@@ -23,6 +23,7 @@ firebase.auth().onIdTokenChanged(async (user) => {
 	Cookies.remove('token');
 });
 
-window.firebase = firebase;
+//For debugging purposes.
+window.firebase = firebase.default;
 
-export default firebase;
+export default firebase.default;

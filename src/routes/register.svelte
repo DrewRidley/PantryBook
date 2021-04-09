@@ -14,14 +14,16 @@
   import Step from "$lib/Step.svelte";
   import { onMount } from "svelte";
   import { page } from '$app/stores';
-
+  import { browser } from '$app/env';
 
   let firebase;
   let db;
 
   onMount(async () => {
-    firebase = (await import("../lib/fb.js")).default;
-    db = firebase.firestore();
+    if(browser) {
+      firebase = (await import("../lib/fb.js")).default;
+      db = firebase.firestore();
+    }
   });
 
   let step = 0;
