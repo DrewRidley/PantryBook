@@ -61,7 +61,7 @@
 ### How is it free?
 
 PlanBook is free because of generous contributions from organizations.
-PlanBook is a minimalistic service that takes a minimalist approach to infrastructure.
+PlanBook is a minimalistic service that uses the least possible compute possible.
 We only use the resources we require.
 
 ### How can I donate?
