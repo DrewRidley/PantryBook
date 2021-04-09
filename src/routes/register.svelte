@@ -29,7 +29,7 @@
     }
   })
 
-  let step = 2;
+  let step = 0;
   let form = {
     name: '',
     size: 0,
