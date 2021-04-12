@@ -23,7 +23,4 @@ firebase.default.auth().onIdTokenChanged(async (user) => {
 	Cookies.remove('token');
 });
 
-//For debugging purposes.
-window.firebase = firebase.default;
-
 export default firebase.default;
