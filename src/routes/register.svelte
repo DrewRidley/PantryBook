@@ -15,6 +15,7 @@
   import { onMount } from "svelte";
   import { page } from '$app/stores';
   import { browser } from '$app/env';
+	import { goto } from '$app/navigation';
 
   let newInvitee;
 
@@ -29,7 +30,7 @@
     }
   })
 
-  let step = 0;
+  let step = 1;
   let form = {
     name: '',
     size: 0,
@@ -48,6 +49,8 @@
     }
   };
 
+  let thisId;
+
   if($page.query.get('org') != undefined) {
       form.name = $page.query.get('org');
   }
@@ -64,7 +67,32 @@
         await registerEmailAsync()
         return;
       }
+      if(step == 2) {
+        //The last page has been completed. There is no validation logic for this page so the validation will automatically succeed.
+        await completeRegistrationAsync();
+      }
     }
+  }
+
+  async function completeRegistrationAsync() {
+
+      let insertedUser = {
+        id: thisId,
+        //This signifies they are the owner of the organization.
+        permission: 2
+      }
+
+      let arr = [];
+      arr.push(insertedUser);
+
+      console.log("Attempted to complete registration!");
+      db.collection('orgs').doc(form.abbreviation).set({
+        name: form.name,
+        size: form.size,
+        users: arr,
+        owner: thisId
+      })
+      await goto('/dashboard');
   }
 
 
@@ -112,15 +140,16 @@
     return true;
   }
 
-  //Creates an organization.
-  async function createOrgAsync() {
-  }
-
   //Registers an owner account using email as the auth provider.
   async function registerEmailAsync() {
     //Since this step hasn't been automatically skipped by the OAuth registration we need to manually create the account.
-    firebase.auth().createUserWithEmailAndPassword(form.email, form.password).then(() => {
-      //Successful registration, advance step.
+    firebase.auth().createUserWithEmailAndPassword(form.email, form.password).then((userCreds) => {
+      let user = userCreds.user;
+      thisId = user.uid;
+      db.collection("users").doc(user.uid).set({
+          org: db.doc("orgs/" + form.abbreviation),
+          email: user.email
+        })
       step++;
     })
       .catch(err => {
@@ -148,7 +177,13 @@
     let provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/userinfo.email');
     provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-    firebase.auth().signInWithPopup(provider).then(() => {
+    firebase.auth().signInWithPopup(provider).then((result) => {
+        let user = result.user;
+        thisId = user.uid;
+        db.collection("users").doc(user.uid).set({
+        org: db.doc("orgs/" + form.abbreviation)
+        email: user.email
+      })
         step++;
     }).catch(err => {
       form.errors.tos = err.msg;
