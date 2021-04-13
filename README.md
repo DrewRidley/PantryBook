@@ -49,7 +49,7 @@
 
 ## Features
 
-- **Free Plan:** With no compromise on features your pantry can utilize our software for free.
+- **Free:** With no compromise on features your pantry can utilize our software for free.
 - **Realtime Editing:** our realtime backend allows multiple users to modify the same data concurrently without problems.
 - **Mobile Support:** With first class mobile support you can expect a no-compromise mobile experience
 - **Intuitive Interface:** With an intuitive interface that is easy to navigate you can find what you are looking for in seconds!
