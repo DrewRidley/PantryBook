@@ -10,27 +10,29 @@
 -->
 
 <script>
+  //Component imports.
   import SelectMenu from "$lib/SelectMenu.svelte";
   import Step from "$lib/Step.svelte";
+
+  //Svelte imports
   import { onMount } from "svelte";
   import { page } from '$app/stores';
   import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 
+
+  //Firebase imports
+  import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+  import { initializeApp } from "firebase/app"
+
+
+
+  let db = getFirestore(firebaseApp);
+
+  //The local instance variable for the current invitee being inputted on the form.
   let newInvitee;
-
-  let db;
-  let firebase;
-
-  //Run client-side imports dynamically on the client. This will not perform tree shaking.
-  onMount(async () => {
-    if(browser) {
-      firebase = (await import("../lib/fb.js")).default;
-      db = firebase.firestore();
-    }
-  })
-
-  let step = 1;
+  
+  let step = 0;
   let form = {
     name: '',
     size: 0,
@@ -143,7 +145,7 @@
   //Registers an owner account using email as the auth provider.
   async function registerEmailAsync() {
     //Since this step hasn't been automatically skipped by the OAuth registration we need to manually create the account.
-    firebase.auth().createUserWithEmailAndPassword(form.email, form.password).then((userCreds) => {
+    createUserWithEmailAndPassword(form.email, form.password).then((userCreds) => {
       let user = userCreds.user;
       thisId = user.uid;
       db.collection("users").doc(user.uid).set({
@@ -174,14 +176,14 @@
 
   //Registers the account using github as the auth provider.
   async function registerGoogleAsync() {
-    let provider = new firebase.auth.GoogleAuthProvider();
+    let provider = new GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/userinfo.email');
     provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-    firebase.auth().signInWithPopup(provider).then((result) => {
+    signInWithPopup(provider).then((result) => {
         let user = result.user;
         thisId = user.uid;
         db.collection("users").doc(user.uid).set({
-        org: db.doc("orgs/" + form.abbreviation)
+        org: db.doc("orgs/" + form.abbreviation),
         email: user.email
       })
         step++;

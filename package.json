@@ -1,5 +1,5 @@
 {
-	"name": "PantryBook",
+	"name": "pantrybook",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "svelte-kit dev --host",
@@ -17,6 +17,7 @@
 		"eslint": "^7.22.0",
 		"eslint-config-prettier": "^8.1.0",
 		"eslint-plugin-svelte3": "^3.1.0",
+		"firebase-admin": "^9.6.0",
 		"postcss": "^8.2.9",
 		"postcss-load-config": "^3.0.1",
 		"prettier": "~2.2.1",
@@ -28,8 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"firebase": "^8.3.3",
-		"firebase-admin": "^9.6.0",
+		"firebase": "^9.0.0-beta.1",
 		"js-cookie": "^2.2.1"
 	}
 }

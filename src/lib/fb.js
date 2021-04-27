@@ -1,26 +1,14 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-import Cookies from 'js-cookie';
+import { getFirestore } from 'firebase/firestore';
 
-let firebaseCfg = {
+const firebaseApp = initializeApp({
 	apiKey: 'AIzaSyB-wUG4UrAaC6gorqB_DZ4FOpYqHcuI8J0',
 	authDomain: 'pantrybook.firebaseapp.com',
 	projectId: 'pantrybook',
 	storageBucket: 'pantrybook.appspot.com',
 	messagingSenderId: '470048751220',
 	appId: '1:470048751220:web:936d8d290a7807faf71b21'
-};
+  });
 
-firebase.default.initializeApp(firebaseCfg);
+export let app = getFirestore(firebaseApp);
 
-firebase.default.auth().onIdTokenChanged(async (user) => {
-	if (user) {
-		const token = await user.getIdToken();
-		Cookies.set('token', token);
-		return;
-	}
-	Cookies.remove('token');
-});
-
-export default firebase.default;
+export let firestore = getFirestore(firebaseApp);
