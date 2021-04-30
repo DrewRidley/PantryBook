@@ -17,17 +17,12 @@
   //Svelte imports
   import { onMount } from "svelte";
   import { page } from '$app/stores';
-  import { browser } from '$app/env';
-	import { goto } from '$app/navigation';
-
 
   //Firebase imports
   import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-  import { initializeApp } from "firebase/app"
+  import { doc, getDoc, updateDoc } from 'firebase/firestore';
+  import { app, db, auth } from '$lib/fb.js';
 
-
-
-  let db = getFirestore(firebaseApp);
 
   //The local instance variable for the current invitee being inputted on the form.
   let newInvitee;
@@ -51,58 +46,19 @@
     }
   };
 
-  let thisId;
-
-  if($page.query.get('org') != undefined) {
+  //Pluck the query parameter into the form if its present.
+  onMount(() => {
+    if($page.query.get('org') != undefined) {
       form.name = $page.query.get('org');
-  }
-
-  let registered = false;
-  async function advance() {
-    if (await validate()) {
-      //The first step doesn't use any server logic at the moment. This should be adjusted to check if a url is valid with firebase.
-      if(step == 0) {
-        step++;
-        return;
-      }
-      if(step == 1) {
-        await registerEmailAsync()
-        return;
-      }
-      if(step == 2) {
-        //The last page has been completed. There is no validation logic for this page so the validation will automatically succeed.
-        await completeRegistrationAsync();
-      }
     }
-  }
+  })
 
-  async function completeRegistrationAsync() {
-
-      let insertedUser = {
-        id: thisId,
-        //This signifies they are the owner of the organization.
-        permission: 2
-      }
-
-      let arr = [];
-      arr.push(insertedUser);
-
-      console.log("Attempted to complete registration!");
-      db.collection('orgs').doc(form.abbreviation).set({
-        name: form.name,
-        size: form.size,
-        users: arr,
-        owner: thisId
-      })
-      await goto('/dashboard');
-  }
-
-
-  //TODO: server side validation for step 1 AND step 2.
   async function validate() {
     if (step == 0) {
-      let orgRef = db.collection('orgs').doc(form.abbreviation);
-      let org = await orgRef.get();
+
+      //Get the organization with the code current entered into the form.
+      let orgRef = doc(db, 'orgs', form.abbreviation);
+      let org = await getDoc(orgRef);
 
       //The first step, organization name, size and abreviation should be setup.
       if (form.name.length < 4) {
@@ -120,7 +76,9 @@
           "The selected prefix must be less than 6 characters.";
         return false;
       }
-      if (org.exists) {
+
+      if (org.exists()) {
+        //The organization code is already being used.
         form.errors.abbreviation = "The selected prefix '" + form.abbreviation +  "' is unavailable.";
         return false;
       }
@@ -130,10 +88,23 @@
       form.errors.abbreviation = '';
     }
     if (step == 1) {
+
+      function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      }
+
       if(form.tos == false) {
         form.errors.tos = 'You must agree to the terms of service to register an account!';
         return false;
       }
+      if(!validateEmail(form.email)) {
+        form.errors.email = "You must use a valid email!";
+        return false;
+      }
+      console.log(auth);
+      window.auth = auth;
+
       form.errors.tos = '';
       form.errors.email = '';
       form.errors.password = '';
@@ -142,16 +113,64 @@
     return true;
   }
 
+  async function advance() {
+    if (await validate()) {
+      //The first step doesn't use any server logic at the moment. This should be adjusted to check if a url is valid with firebase.
+      if(step == 0) {
+        step++;
+        return;
+      }
+      if(step == 1) {
+        //The reason we don't try other methods of registration is because advance is only called when the email login is specifically used.
+        //If OAuth is used for authentication purposes, it will increment the step on its own.
+        await registerEmailAsync();
+        step++;
+        return;
+      }
+      if(step == 2) {
+        //The last page has been completed. There is no validation logic for this page so the validation will automatically succeed.
+        await completeRegistrationAsync();
+        step++;
+        return;
+      }
+    }
+  }
+
+  async function completeRegistrationAsync() {
+
+      /*
+      let insertedUser = {
+        id: thisId,
+        //This signifies they are the owner of the organization.
+        permission: 2
+      }
+
+      let arr = [];
+      arr.push(insertedUser);
+
+      console.log("Attempted to complete registration!");
+      db.collection('orgs').doc(form.abbreviation).set({
+        name: form.name,
+        size: form.size,
+        users: arr,
+        owner: thisId
+      })
+      await goto('/dashboard');
+       */
+  }
+
+
   //Registers an owner account using email as the auth provider.
   async function registerEmailAsync() {
     //Since this step hasn't been automatically skipped by the OAuth registration we need to manually create the account.
     createUserWithEmailAndPassword(form.email, form.password).then((userCreds) => {
       let user = userCreds.user;
-      thisId = user.uid;
-      db.collection("users").doc(user.uid).set({
-          org: db.doc("orgs/" + form.abbreviation),
-          email: user.email
-        })
+      //thisId = user.uid;
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        org: db.doc("orgs/" + form.abbreviation),
+        email: user.email
+      })
       step++;
     })
       .catch(err => {

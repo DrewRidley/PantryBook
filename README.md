@@ -60,38 +60,39 @@
 
 ### How is it free?
 
-PlanBook is free because of generous contributions from organizations.
-PlanBook is a minimalistic service that uses the least possible compute possible.
+PantryBook is free because of generous contributions from organizations.
+PantryBook is a minimalistic service 
+that uses the least possible compute possible.
 We only use the resources we require.
 
 ### How can I donate?
 
-You can donate to PlanBook by sponsoring us or donating via paypal.
+You can donate to PantryBook by sponsoring us or donating via paypal.
 If it's more convenient, it's also possible to configure monthly donations directly
 from the website.
 
 ### How do I use it on mobile?
 
 To use it on mobile, simply navigate to the same url as you would use on your desktop.
-PlanBook intelligently detects your mobile device and adapts accordingly.
+PantryBook intelligently detects your mobile device and adapts accordingly.
 We also have a mobile app in the works which you can track here.
 
 ## Installation
 
-To install PlanBook for your organization, the easiest way is to visit our website.
+To install PantryBook for your organization, the easiest way is to visit our website.
 After visiting our website you can create your organization and manage your users effortlessly.
-If you would like to configure PlanBook further it is possible to clone the repository
+If you would like to configure PantryBook further it is possible to clone the repository
 and run it locally or on your own servers. The procedure to deploy locally is described here.
 
 ## Support
 
-If at any point while using PlanBook you encounter a bug, want to see a new feature
+If at any point while using PantryBook you encounter a bug, want to see a new feature
 or have a question, the easiest way to get support is to file an issue here on GitHub
-or email us directly at support@planbook.org.
+or email us directly at support@PantryBook.org.
 
 ## Contributions
 
-Before working on a contribution to PlanBook, write a feature proposal on github. If the feature
+Before working on a contribution to PantryBook, write a feature proposal on github. If the feature
 proposal is approved you may start development. Before submitting a pull-request, ensure that
 the linter and unit tests successfully run. Follow any directions associated with the code
 review, and your feature will likely be merged.
