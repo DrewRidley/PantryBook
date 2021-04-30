@@ -191,7 +191,7 @@
 	<div
 		class="flex flex-col items-start max-w-screen-sm md:flex-row sm:mx-auto max-w-6xl mx-auto"
 	>
-		<a href="/" class="mb-4 mr-8">
+		<a class="text-blue-600 underline" href="/" class="mb-4 mr-8">
 			<div
 				class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-100"
 			>
