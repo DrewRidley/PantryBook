@@ -19,7 +19,7 @@
   import { page } from '$app/stores';
 
   //Firebase imports
-  import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+  import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail } from 'firebase/auth';
   import { doc, getDoc, updateDoc } from 'firebase/firestore';
   import { app, db, auth } from '$lib/fb.js';
 
@@ -52,6 +52,7 @@
       form.name = $page.query.get('org');
     }
   })
+
 
   async function validate() {
     if (step == 0) {
@@ -102,8 +103,16 @@
         form.errors.email = "You must use a valid email!";
         return false;
       }
-      console.log(auth);
-      window.auth = auth;
+
+      if(((await fetchSignInMethodsForEmail(auth, form.email)).length != 0)) {
+        form.errors.email = "This email is already registered!";
+        return false;
+      }
+
+      if(form.password.length < 6) {
+        form.errors.password = "The password must contain at least 6 characters!";
+      }
+
 
       form.errors.tos = '';
       form.errors.email = '';
@@ -163,7 +172,7 @@
   //Registers an owner account using email as the auth provider.
   async function registerEmailAsync() {
     //Since this step hasn't been automatically skipped by the OAuth registration we need to manually create the account.
-    createUserWithEmailAndPassword(form.email, form.password).then((userCreds) => {
+    createUserWithEmailAndPassword(form.email, form.password).then(async (userCreds) => {
       let user = userCreds.user;
       //thisId = user.uid;
       const userRef = doc(db, "users", user.uid);
@@ -174,18 +183,21 @@
       step++;
     })
       .catch(err => {
-        if(err.code.includes("email")) {
-          form.errors.email = err.message;
-          return;
-        }
-        if(err.code.includes("password")) {
-          form.errors.password = err.message;
-          return;
-        }
-        //Put the error message where the TOS error is displayed since we can't categorize it appropiately.
-        form.errors.tos = err.message;
+        if(err.code != undefined) {
+          if(err.code.includes("email")) {
+            form.errors.email = err.message;
+            return;
+          }
+          if(err.code.includes("password")) {
+            form.errors.password = err.message;
+            return;
+          }
+          //Put the error message where the TOS error is displayed since we can't categorize it appropiately.
+          form.errors.tos = err.message;
 
-        console.log(form.errors);
+          console.log(form.errors);
+        }
+
       });
   }
 
@@ -532,16 +544,7 @@
           <button
             type="submit"
             on:click={() => {
-              if(step == 2) {
-
-                firebase.auth().currentUser.delete().then(() => {
-                  							step--;
-                })
-              }
-              else {
-                step--;
-              }
-
+               step--;
 						}}
             class="w-4/12  inline-block py-2 px-4 my-6 mr-1 mt-8 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
