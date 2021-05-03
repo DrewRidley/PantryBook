@@ -7,200 +7,142 @@
             {JSON.stringify(form, null, '\t')}
           </pre>
 -->
-
 <script>
-	//Component imports.
-	import SelectMenu from "$lib/SelectMenu.svelte";
-	import Step from "$lib/Step.svelte";
+	//Component imports:
+	import SelectMenu from '$lib/Components/SelectMenu.svelte';
+	import Step from '$lib/Components/Step.svelte';
 
-	//Svelte imports
+	//Svelte import:
+	import { goto } from '$app/navigation';
 	import { onMount } from "svelte";
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 
-	//Firebase imports
-	import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail } from 'firebase/auth';
-	import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
+	//Firebase imports:
+	import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
+	import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 	import { db, auth } from '$lib/fb.js';
-	//The local instance variable for the current invitee being inputted on the form.
-	let newInvitee;
 
+	onMount(() => {
+		if($page.query.get('org') != undefined) {
+			form.name = $page.query.get('org');
+		}
+	})
+
+	//The current user being added to the invitee list.
+	let invitee;
 	let step = 0;
 	let form = {
 		name: '',
 		size: 0,
-		abbreviation: 'abc',
+		tag: 'abc',
 		email: '',
 		password: '',
 		tos: false,
 		invitees: [],
+
 		errors: {
 			name: '',
-			abbreviation: '',
+			tag: '',
 			email: '',
 			password: '',
 			tos: ''
 		}
 	};
 
-
-	//Pluck the query parameter into the form if its present.
-	onMount(() => {
-		if($page.query.get('org') != undefined) {
-			form.name = $page.query.get('org');
-		}
-	})
-	async function validate() {
+	async function validateForm() {
 		function validateEmail(email) {
 			const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			return re.test(String(email).toLowerCase());
 		}
-
 		if (step == 0) {
-			//Get the organization with the code current entered into the form.
-			let orgRef = doc(db, 'orgs', form.abbreviation);
-			let org = await getDoc(orgRef);
-			//The first step, organization name, size and abreviation should be setup.
-			if (form.name.length < 4) {
+			if(form.name.length < 4) {
 				form.errors.name =
 					"The organization name must be more than 4 characters.";
 				return false;
 			}
-			if (form.abbreviation.length < 2) {
-				form.errors.abbreviation =
+			if (form.tag.length < 2) {
+				form.errors.tag =
 					"The selected prefix must be greater than 2 characters long.";
 				return false;
 			}
-			if (form.abbreviation.length > 6) {
-				form.errors.abbreviation =
+			if (form.tag.length > 6) {
+				form.errors.tag =
 					"The selected prefix must be less than 6 characters.";
 				return false;
 			}
-			if (org.exists()) {
-				//The organization code is already being used.
-				form.errors.abbreviation = "The selected prefix '" + form.abbreviation +  "' is unavailable.";
+
+			let orgRef = doc(db, "orgs", form.tag);
+			let org = await getDoc(orgRef);
+			if(org.exists()) {
+				form.errors.tag = "The selected prefix '" + form.tag +  "' is unavailable.";
 				return false;
 			}
 
 			form.errors.name = '';
-			form.errors.abbreviation = '';
-			return true;
+			form.errors.tag = '';
+
 		}
 		if (step == 1) {
-			if(form.tos == false) {
-				form.errors.tos = 'You must agree to the terms of service to register an account!';
+
+			if(!form.tos) {
+				form.errors.tos = "You must agree to the terms of service to register an account!";
 				return false;
 			}
+
 			if(!validateEmail(form.email)) {
 				form.errors.email = "You must use a valid email!";
 				return false;
 			}
-			if((await fetchSignInMethodsForEmail(auth, form.email)).length != 0) {
+
+			if((await fetchSignInMethodsForEmail(auth, 'drew.ridley03@gmail.com')).length > 0) {
 				form.errors.email = "This email is already registered!";
 				return false;
 			}
-			if(form.password.length < 6) {
-				form.errors.password = "The password must contain at least 6 characters."
-				return false;
-			}
-
 
 			form.errors.tos = '';
 			form.errors.email = '';
 			form.errors.password = '';
+
 		}
+
 		return true;
 	}
-	async function advance() {
-		if (await validate()) {
-			//The first step doesn't use any server logic at the moment. This should be adjusted to check if a url is valid with firebase.
-			if(step == 0) {
-				step++;
-				return;
-			}
-			if(step == 1) {
-				//The reason we don't try other methods of registration is because advance is only called when the email login is specifically used.
-				//If OAuth is used for authentication purposes, it will increment the step on its own.
-				step++;
-				return;
-			}
-			if(step == 2) {
-				//Register the email now.
-				await registerEmailAsync();
 
-				//Finish registration and complete the organization.
-				await completeRegistrationAsync();
-
-				//Return, yielding the context to the new dashboard module.
+	async function advanceForm() {
+		if(await validateForm()) {
+			if (step == 2) {
+				await registerAsync();
 				return;
 			}
+			step++;
 		}
 	}
-	async function completeRegistrationAsync() {
-		 //This logic here requires an urgent refactor since its dangerous to allow the clients to simply set their permission levels.
-		 let orgRef = doc(db, 'orgs', form.abbreviation);
-		 await setDoc(orgRef, {
-			 name: form.name,
-			 size: form.size,
-			 users: [{
-				 id: auth.currentUser.uid,
-				 permissions: 2
-			 }],
-			 owner: 0
-		 });
-		 await goto('/dashboard');
 
-	}
-	//Registers an owner account using email as the auth provider.
-	async function registerEmailAsync() {
-		//Since this step hasn't been automatically skipped by the OAuth registration we need to manually create the account.
+	//Registers the user account and creates the organization in firebase.
+	async function registerAsync() {
 		createUserWithEmailAndPassword(auth, form.email, form.password).then(async (userCreds) => {
 			let user = userCreds.user;
-			//thisId = user.uid;
-			const userRef = doc(db, "users", user.uid);
-			await updateDoc(userRef, {
-				org: doc(db, "orgs/" + form.abbreviation),
+
+			//Creates the user doc.
+			await setDoc(doc(db, "users", user.uid), {
+				org: doc(db, "orgs/" + form.tag),
 				email: user.email
 			})
-			step++;
-		})
-			.catch(err => {
-				if(err.code != undefined) {
-						if(err.code.includes("email")) {
-						form.errors.email = err.message;
-						return;
-					}
-					if(err.code.includes("password")) {
-						form.errors.password = err.message;
-						return;
-					}
-					//Put the error message where the TOS error is displayed since we can't categorize it appropiately.
-					form.errors.tos = err.message;
-				}
-				else {
-					console.log(err);
-				}
 
-			});
-	}
-	//Registers an account using GitHub as the auth provider.
-	async function registerFacebookAsync() {
-	}
-	//Registers the account using github as the auth provider.
-	async function registerGoogleAsync() {
-		let provider = new GoogleAuthProvider();
-		provider.addScope('https://www.googleapis.com/auth/userinfo.email');
-		provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-		signInWithPopup(provider).then(async (result) => {
-			let user = result.user;
-			const docRef = doc(db, "users", user.uid);
-			await updateDoc(docRef, {
-					org: doc("orgs/" + form.abbreviation),
-				email: user.email
-			});
-			step++;
-		}).catch(err => {
-			form.errors.tos = err.msg;
+			//Create the organization doc associated with the org.
+			await setDoc(doc(db, "orgs", form.tag), {
+				name: form.name,
+				size: form.size,
+				users: [{
+					id: auth.currentUser.uid,
+					//The user is an owner of the organization.
+					permission: 2
+				}]
+			})
+
+
+
+			await goto('/dashboard');
 		})
 	}
 </script>
@@ -254,7 +196,7 @@
 									: 'focus:ring-indigo-500 focus:border-indigo-500'} appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm"
 							/>
 						</div>
-						{#if form.errors.name != ''}
+						{#if form.errors.name !== ''}
 							<p class="mt-2 text-sm text-red-600" id="name-error">
 								{form.errors.name}
 							</p>
@@ -280,17 +222,17 @@
 								name="code"
 								type="text"
 								required
-								bind:value={form.abbreviation}
+								bind:value={form.tag}
 								on:input={() => {
-									form.errors.abbreviation = '';
+									form.errors.tag = '';
 								}}
-								class="{form.errors.abbreviation != ''
+								class="{form.errors.tag != ''
 									? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 border-red-500 sm:text-sm'
 									: 'focus:ring-indigo-500 focus:border-indigo-500'} appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm"
 							/>
-							{#if form.errors.abbreviation != ''}
+							{#if form.errors.tag != ''}
 								<p class="mt-2 text-sm text-red-600" id="abb-error">
-									{form.errors.abbreviation}
+									{form.errors.tag}
 								</p>
 							{:else}
 								<p class="text-sm pt-2">
@@ -298,7 +240,7 @@
 									<span class="underline text-blue-600">
 										{typeof document == 'undefined' ||
 										document.location.origin}
-										/{form.abbreviation}
+										/{form.tag}
 									</span>
 								</p>
 							{/if}
@@ -408,57 +350,6 @@
 							</div>
 						</div>
 					{/if}
-					<div class="mt-6">
-						<div class="relative">
-							<div class="absolute inset-0 flex items-center">
-								<div class="w-full border-t border-gray-300" />
-							</div>
-							<div class="relative flex justify-center text-sm">
-								<span class="px-2 bg-white text-gray-500">
-									Or continue with
-								</span>
-							</div>
-						</div>
-						<div class="mt-6 grid grid-cols-3 gap-3">
-							<div>
-							<span
-								on:click={registerGoogleAsync}
-								class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-								<span class="sr-only">Sign up with Google</span>
-                <svg
-									class="w-5 h-5"
-									fill="currentColor"
-									viewBox="0 0 24 24"
-									aria-hidden="true"
-								>
-                  <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-							</svg>
-							</span>
-							</div>
-							<div>
-							<span
-								on:click={registerFacebookAsync}
-								class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-								<span class="sr-only">Sign up with Facebook</span>
-								<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-									<path fill-rule="evenodd"
-												d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"
-												clip-rule="evenodd" />
-								</svg>
-							</span>
-							</div>
-							<div>
-							<span
-								class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-								<span class="sr-only">Sign up with Twitter</span>
-								<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-									<path
-										d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-								</svg>
-							</span>
-							</div>
-						</div>
-					</div>
 				</form>
 			{/if}
 			{#if step == 2}
@@ -487,7 +378,7 @@
 									name="invitee"
 									id="invitee"
 									class=" focus:ring-indigo-500 focus:border-indigo-500 block w-full py-2 pl-10 sm:text-sm border-gray-500 rounded-md"
-									bind:value={newInvitee}
+									bind:value={invitee}
 									placeholder="joe@example.com">
 							</div>
 							<button
@@ -496,7 +387,7 @@
 								class="w-2/12 ml-4  mt-1 py-2 border border-transparent text-xs font-medium rounded shadow-sm
                 text-white text-center bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
 								on:click={() => {
-                  form.invitees = [...form.invitees, newInvitee]
+                  form.invitees = [...form.invitees, invitee]
                 }}>
 								Add
 							</button>
@@ -524,7 +415,9 @@
 					<button
 						type="submit"
 						on:click={() => {
-              step--;
+              if (step > 0) {
+              	step--;
+              }
 						}}
 						class="w-4/12  inline-block py-2 px-4 my-6 mr-1 mt-8 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 					>
@@ -533,7 +426,7 @@
 				{/if}
 				<button
 					type="submit"
-					on:click={advance}
+					on:click={async () => {await advanceForm()}}
 					class="{step == 0
 						? 'w-full'
 						: 'w-7/12'} inline-block py-2 px-4 my-6 mt-8 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
