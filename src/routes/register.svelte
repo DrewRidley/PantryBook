@@ -19,7 +19,7 @@
 
 	//Firebase imports:
 	import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
-	import { doc, getDoc, updateDoc } from 'firebase/firestore';
+	import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 	import { db, auth } from '$lib/fb.js';
 
 	onMount(() => {
@@ -123,15 +123,14 @@
 		createUserWithEmailAndPassword(auth, form.email, form.password).then(async (userCreds) => {
 			let user = userCreds.user;
 
-			const userDocRef = doc(db, "users", user.uid);
-			//Create the user document in the event that user specific data needs to be stored later on.
-			await updateDoc(userDocRef, {
-				org: doc(db, "orgs/" + form.abbreviation),
+			//Creates the user doc.
+			await setDoc(doc(db, "users", user.uid), {
+				org: doc(db, "orgs/" + form.tag),
 				email: user.email
-			});
+			})
 
 			//Create the organization doc associated with the org.
-			doc(db, 'orgs', form.tag).set({
+			await setDoc(doc(db, "orgs", form.tag), {
 				name: form.name,
 				size: form.size,
 				users: [{
@@ -139,7 +138,9 @@
 					//The user is an owner of the organization.
 					permission: 2
 				}]
-			});
+			})
+
+
 
 			await goto('/dashboard');
 		})
