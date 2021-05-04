@@ -19,7 +19,7 @@
 
 	//Firebase imports:
 	import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
-	import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+	import { doc, getDoc, setDoc } from 'firebase/firestore';
 	import { db, auth } from '$lib/fb.js';
 
 	onMount(() => {

@@ -1,6 +1,30 @@
 <script>
+	import { auth } from '$lib/fb.js';
+	import { onAuthStateChanged } from 'firebase/auth';
+
+	//Svelte imports.
+	import { onMount } from "svelte";
+	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
+
+	//A local instance variable used for the query parameter redirect.
 	let orgName;
+
+	onAuthStateChanged(auth, async (user) => {
+		if(user != undefined) {
+			await goto('/dashboard');
+		}
+	})
+
+	onMount(async () => {
+		if (browser) {
+			console.log(auth);
+			//If we are running on the browser,
+			if (auth.currentUser != undefined) {
+				await goto('/dashboard');
+			}
+		}
+	})
 </script>
 
 <body>

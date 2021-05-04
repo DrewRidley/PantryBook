@@ -23,14 +23,11 @@
     "svelte": "^3.34.0",
     "svelte-preprocess": "^4.7.1",
     "tailwindcss": "^2.1.1",
-    "vite": "^2.1.0"
+    "vite": "^2.1.0",
+    "firebase": "^9.0.0-beta.1"
   },
   "type": "module",
   "dependencies": {
-    "@fontsource/fira-mono": "^4.2.2",
-    "@lukeed/uuid": "^2.0.0",
-    "cookie": "^0.4.1",
-    "firebase": "^9.0.0-beta.1",
-    "js-cookie": "^2.2.1"
+
   }
 }
