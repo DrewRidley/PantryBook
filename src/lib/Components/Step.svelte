@@ -16,9 +16,7 @@
 		{#each Array(selected) as _, i}
 			<li>
 				<!-- Completed Step -->
-				<div
-					class="block w-2.5 h-2.5 bg-indigo-600 rounded-full hover:bg-indigo-900"
-				>
+				<div class="block w-2.5 h-2.5 bg-indigo-600 rounded-full hover:bg-indigo-900">
 					<span class="sr-only">Step {i}</span>
 				</div>
 			</li>
@@ -26,17 +24,11 @@
 
 		<li>
 			<!-- Current Step -->
-			<div
-				class="relative flex items-center justify-center"
-				aria-current="step"
-			>
+			<div class="relative flex items-center justify-center" aria-current="step">
 				<span class="absolute w-5 h-5 p-px flex" aria-hidden="true">
 					<span class="w-full h-full rounded-full bg-indigo-200" />
 				</span>
-				<span
-					class="relative block w-2.5 h-2.5 bg-indigo-600 rounded-full"
-					aria-hidden="true"
-				/>
+				<span class="relative block w-2.5 h-2.5 bg-indigo-600 rounded-full" aria-hidden="true" />
 				<span class="sr-only">Step {selected}</span>
 			</div>
 		</li>
@@ -44,12 +36,9 @@
 			{#each Array(length - (selected + 1)) as _, i}
 				<li>
 					<!-- Upcoming Step -->
-					<a
-						href="#"
-						class="block w-2.5 h-2.5 bg-gray-300 rounded-full hover:bg-gray-400"
-					>
+					<div href="#" class="block w-2.5 h-2.5 bg-gray-300 rounded-full hover:bg-gray-400">
 						<span class="sr-only">Step {selected + i}</span>
-					</a>
+					</div>
 				</li>
 			{/each}
 		{/if}
