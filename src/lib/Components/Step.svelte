@@ -36,9 +36,9 @@
 			{#each Array(length - (selected + 1)) as _, i}
 				<li>
 					<!-- Upcoming Step -->
-					<a href="#" class="block w-2.5 h-2.5 bg-gray-300 rounded-full hover:bg-gray-400">
+					<div href="#" class="block w-2.5 h-2.5 bg-gray-300 rounded-full hover:bg-gray-400">
 						<span class="sr-only">Step {selected + i}</span>
-					</a>
+					</div>
 				</li>
 			{/each}
 		{/if}

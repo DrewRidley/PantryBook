@@ -6,9 +6,9 @@
 </script>
 
 <div>
-	<label id="listbox-label" class="block text-sm font-medium text-gray-700">
+	<div id="selectLabel" class="block text-sm font-medium text-gray-700">
 		{label}
-	</label>
+	</div>
 	<div class="mt-1 relative">
 		<button
 			type="button"
