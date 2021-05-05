@@ -23,9 +23,7 @@
 			<span class="block truncate">
 				{options[selected]}
 			</span>
-			<span
-				class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
-			>
+			<span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
 				<!-- Heroicon name: solid/selector -->
 				<svg
 					class="h-5 w-5 text-gray-400"
@@ -74,11 +72,7 @@
 						}}
 					>
 						<!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-						<span
-							class="{selected == i
-								? 'font-semibold'
-								: 'font-normal'}  block truncate"
-						>
+						<span class="{selected == i ? 'font-semibold' : 'font-normal'}  block truncate">
 							{opt}
 						</span>
 						<!--

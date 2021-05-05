@@ -5,3 +5,5 @@ node_modules
 /functions
 /.idea
 /.vercel_build_output
+/myApp
+.firebaserc

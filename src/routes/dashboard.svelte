@@ -7,12 +7,10 @@
 	let user;
 	onAuthStateChanged(auth, async (u) => {
 		user = u;
-		console.log("Running on server!");
-	})
+		console.log('Running on server!');
+	});
 </script>
-
 
 <pre>
 		{JSON.stringify(user, null, '\t')}
 </pre>
-
