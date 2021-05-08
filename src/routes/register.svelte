@@ -16,11 +16,14 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/env';
 
-
 	//Firebase imports:
 	import { getApp } from 'firebase/app';
 	import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
-	import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
+	import {
+		getAuth,
+		createUserWithEmailAndPassword,
+		fetchSignInMethodsForEmail
+	} from 'firebase/auth';
 
 	let cookies;
 	let app;
@@ -30,15 +33,11 @@
 	onMount(async () => {
 		if (browser) {
 			cookies = await import('js-cookie');
-			app = getApp()
+			app = getApp();
 			db = getFirestore(app);
 			auth = getAuth(app);
 		}
-	})
-
-
-
-
+	});
 
 	onMount(() => {
 		if ($page.query.get('org') != undefined) {
@@ -135,8 +134,7 @@
 		createUserWithEmailAndPassword(auth, form.email, form.password).then(async (userCreds) => {
 			let user = userCreds.user;
 
-			try
-			{
+			try {
 				//Creates the user doc.
 				await setDoc(doc(db, 'users', user.uid), {
 					org: doc(db, 'orgs/' + form.tag),
@@ -159,8 +157,7 @@
 				cookies.set('auth', true, { expires: 90 });
 
 				await goto('/dashboard');
-			}
-			catch (err) {
+			} catch (err) {
 				//Delete the user so they can try again to make the account/
 				await user.delete();
 				console.log(err);

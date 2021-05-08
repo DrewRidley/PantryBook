@@ -1,13 +1,10 @@
 <script>
-
 	//Svelte imports.
 	import { goto } from '$app/navigation';
 
 	//A local instance variable used for the query parameter redirect.
 	let orgName;
-
 </script>
-
 
 <body>
 	<!-- Begin Navbar. -->

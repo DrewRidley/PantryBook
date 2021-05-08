@@ -18,18 +18,17 @@
 					appId: '1:470048751220:web:936d8d290a7807faf71b21'
 				});
 
-
 				let auth = getAuth(app);
 				let cookies = await import('js-cookie');
 
-				auth.onAuthStateChanged(user => {
-						if(user != null) {
-							cookies.set('auth', true, { expires: 90 });
-						}
-				})
+				auth.onAuthStateChanged((user) => {
+					if (user != null) {
+						cookies.set('auth', true, { expires: 90 });
+					}
+				});
 			}
 		}
-	})
+	});
 </script>
 
 <svelte:head>
@@ -37,5 +36,5 @@
 	<meta name="description" content="Fast, intuitive pantry management solutions" />
 </svelte:head>
 <main>
-	<slot/>
+	<slot />
 </main>
