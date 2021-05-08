@@ -14,11 +14,31 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { browser } from '$app/env';
+
 
 	//Firebase imports:
-	import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
-	import { doc, getDoc, setDoc } from 'firebase/firestore';
-	import { db, auth } from '$lib/fb.js';
+	import { getApp } from 'firebase/app';
+	import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+	import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
+
+	let cookies;
+	let app;
+	let db;
+	let auth;
+
+	onMount(async () => {
+		if (browser) {
+			cookies = await import('js-cookie');
+			app = getApp()
+			db = getFirestore(app);
+			auth = getAuth(app);
+		}
+	})
+
+
+
+
 
 	onMount(() => {
 		if ($page.query.get('org') != undefined) {
@@ -87,7 +107,7 @@
 				return false;
 			}
 
-			if ((await fetchSignInMethodsForEmail(auth, 'drew.ridley03@gmail.com')).length > 0) {
+			if ((await fetchSignInMethodsForEmail(auth, form.email)).length > 0) {
 				form.errors.email = 'This email is already registered!';
 				return false;
 			}
@@ -115,26 +135,36 @@
 		createUserWithEmailAndPassword(auth, form.email, form.password).then(async (userCreds) => {
 			let user = userCreds.user;
 
-			//Creates the user doc.
-			await setDoc(doc(db, 'users', user.uid), {
-				org: doc(db, 'orgs/' + form.tag),
-				email: user.email
-			});
+			try
+			{
+				//Creates the user doc.
+				await setDoc(doc(db, 'users', user.uid), {
+					org: doc(db, 'orgs/' + form.tag),
+					email: user.email
+				});
 
-			//Create the organization doc associated with the org.
-			await setDoc(doc(db, 'orgs', form.tag), {
-				name: form.name,
-				size: form.size,
-				users: [
-					{
-						id: auth.currentUser.uid,
-						//The user is an owner of the organization.
-						permission: 2
-					}
-				]
-			});
+				//Create the organization doc associated with the org.
+				await setDoc(doc(db, 'orgs', form.tag), {
+					name: form.name,
+					size: form.size,
+					users: [
+						{
+							id: auth.currentUser.uid,
+							//The user is an owner of the organization.
+							permission: 2
+						}
+					]
+				});
 
-			await goto('/dashboard');
+				cookies.set('auth', true, { expires: 90 });
+
+				await goto('/dashboard');
+			}
+			catch (err) {
+				//Delete the user so they can try again to make the account/
+				await user.delete();
+				console.log(err);
+			}
 		});
 	}
 </script>
