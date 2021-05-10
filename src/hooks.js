@@ -11,7 +11,13 @@ export async function handle({ request, render }) {
 					}
 				};
 			}
-		} else if (path.includes('/dashboard')) {
+		} else if (
+			path.includes('/dashboard') ||
+			path.includes('/clients') ||
+			path.includes('/finances') ||
+			path.includes('/inventory') ||
+			path.includes('/reports')
+		) {
 			return {
 				status: 302,
 				headers: {
