@@ -1,7 +1,6 @@
 export async function handle({ request, render }) {
 	const { path } = request;
 
-	console.log(request.headers);
 	if (request.headers.cookie.includes('auth')) {
 		if (path == '/') {
 			return {
