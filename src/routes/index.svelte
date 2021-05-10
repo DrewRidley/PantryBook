@@ -6,6 +6,7 @@
 	let orgName;
 </script>
 
+
 <body>
 	<!-- Begin Navbar. -->
 	<div class="w-full px-4 py-5 mx-auto md:px-24 lg:px-8 bg-gray-200">
