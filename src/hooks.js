@@ -10,8 +10,7 @@ export async function handle({ request, render }) {
 				}
 			};
 		}
-	} 
-	else if (path.includes('/dashboard')){
+	} else if (path.includes('/dashboard')) {
 		return {
 			status: 302,
 			headers: {
