@@ -75,7 +75,7 @@ from the website.
 
 To use it on mobile, simply navigate to the same url as you would use on your desktop.
 PantryBook intelligently detects your mobile device and adapts accordingly.
-We also have a mobile app in the works which you can track here.
+We also have a mobile app planned for the future.
 
 ## Installation
 
