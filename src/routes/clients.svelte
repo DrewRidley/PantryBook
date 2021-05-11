@@ -1,5 +1,23 @@
 <script>
 	import Sidebar from '../lib/Components/Sidebar.svelte';
+
+	let data = {
+		users: [
+			{
+				name: 'Jane Cooper',
+				email: 'jane@coops.net',
+				revenue: '100k/yr',
+				visits: 0
+			},
+			{
+				name: 'Cooper Jane',
+				email: 'coops@jane.net',
+				revenue: '400k/yr',
+				visits: 420
+			}
+		]
+	}
+
 </script>
 
 <!-- This example requires Tailwind CSS v2.0+ -->
@@ -34,14 +52,84 @@
 				<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
 					<h1 class="text-2xl font-semibold text-gray-900">Clients</h1>
 				</div>
-				<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-					<!-- Replace with your content -->
-					<div class="py-4">
-						<div class="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-8">
+					<div class="flex flex-col">
+						<div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+							<div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+								<div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+									<table class="min-w-full divide-y divide-gray-200">
+										<thead class="bg-gray-50">
+										<tr>
+											<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+												Name
+											</th>
+											<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+												Email Address
+											</th>
+											<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+												Household Revenue
+											</th>
+											<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+												# of Visits
+											</th>
+											<th scope="col" class="relative px-6 py-3">
+												<span class="sr-only">View</span>
+											</th>
+										</tr>
+										</thead>
+										<tbody>
+										<!-- Odd row -->
+										{#each data.users as user}
+										<tr class="even:bg-white odd:bg-gray-80">
+											<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+												{user.name}
+											</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+												{user.email}
+											</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+												{user.revenue}
+											</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+												{user.visits}
+											</td>
+											<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+												<a href="#" class="text-indigo-600 hover:text-indigo-900">View</a>
+											</td>
+										</tr>
+										{/each}
+
+										<!-- More people... -->
+										</tbody>
+									</table>
+									<nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6" aria-label="Pagination">
+										<div class="hidden sm:block">
+											<p class="text-sm text-gray-700">
+												Showing
+												<span class="font-medium">1</span>
+												to
+												<span class="font-medium">10</span>
+												of
+												<span class="font-medium">20</span>
+												results
+											</p>
+										</div>
+										<div class="flex-1 flex justify-between sm:justify-end">
+											<a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+												Previous
+											</a>
+											<a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+												Next
+											</a>
+										</div>
+									</nav>
+								</div>
+							</div>
+						</div>
 					</div>
-					<!-- /End replace -->
 				</div>
 			</div>
 		</main>
 	</div>
 </div>
+
