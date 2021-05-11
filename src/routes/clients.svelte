@@ -14,7 +14,25 @@
 				email: 'coops@jane.net',
 				revenue: '400k/yr',
 				visits: 420
-			}
+			},
+			{
+				name: 'Jane Cooper',
+				email: 'jane@coops.net',
+				revenue: '100k/yr',
+				visits: 0
+			},
+			{
+				name: 'Jane Cooper',
+				email: 'jane@coops.net',
+				revenue: '100k/yr',
+				visits: 0
+			},
+			{
+				name: 'Jane Cooper',
+				email: 'jane@coops.net',
+				revenue: '100k/yr',
+				visits: 0
+			},
 		]
 	};
 </script>
