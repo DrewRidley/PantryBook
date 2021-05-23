@@ -11,10 +11,16 @@
 	let db;
 	let auth;
 
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+
 	onMount(async () => {
 		if (browser) {
+			await sleep(100);
 			cookies = await import('js-cookie');
-			app = getApp();
+			app = getApp('PantryBook');
 			db = getFirestore(app);
 			auth = getAuth(app);
 		}
