@@ -72,6 +72,7 @@
 					class="{selected == 0
 						? 'bg-indigo-800 text-white'
 						: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+					sveltekit:prefetch
 				>
 					<!-- Heroicon name: outline/home -->
 					<svg
@@ -97,6 +98,7 @@
 					class="{selected == 1
 						? 'bg-indigo-800 text-white'
 						: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+					sveltekit:prefetch
 				>
 					<!-- Heroicon name: outline/users -->
 					<svg
@@ -122,6 +124,7 @@
 					class="{selected == 2
 						? 'bg-indigo-800 text-white'
 						: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+					sveltekit:prefetch
 				>
 					<!-- Heroicon name: outline/folder -->
 					<svg
@@ -147,6 +150,7 @@
 					class="{selected == 3
 						? 'bg-indigo-800 text-white'
 						: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+					sveltekit:prefetch
 				>
 					<!-- Heroicon name: outline/calendar -->
 					<svg
@@ -193,12 +197,12 @@
 				</a>
 			</nav>
 		</div>
-		<div class='flex-shrink-0 flex'>
+		<div class="flex-shrink-0 flex">
 			<a
 				href="/reports"
 				class="{selected == 3
-						? 'bg-indigo-800 text-white'
-						: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+					? 'bg-indigo-800 text-white'
+					: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
 			>
 				<!-- Heroicon name: outline/calendar -->
 				<svg
@@ -242,8 +246,7 @@
 		<!-- Sidebar component, swap this element with another sidebar if you like -->
 		<div class="flex flex-col h-0 flex-1">
 			<div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-				<div class="flex items-center flex-shrink-0 px-4">
-				</div>
+				<div class="flex items-center flex-shrink-0 px-4" />
 				<nav class="mt-5 flex-1 px-2 space-y-1">
 					<!-- Current: "bg-indigo-800 text-white", Default: "text-white hover:bg-indigo-600 hover:bg-opacity-75" -->
 					<a
@@ -251,6 +254,7 @@
 						class="{selected == 0
 							? 'bg-indigo-800 text-white'
 							: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+						sveltekit:prefetch
 					>
 						<!-- Heroicon name: outline/home -->
 						<svg
@@ -276,6 +280,7 @@
 						class="{selected == 1
 							? 'bg-indigo-800 text-white'
 							: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+						sveltekit:prefetch
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -299,6 +304,7 @@
 						class="{selected == 2
 							? 'bg-indigo-800 text-white'
 							: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+						sveltekit:prefetch
 					>
 						<!-- Heroicon name: outline/folder -->
 						<svg
@@ -324,6 +330,7 @@
 						class="{selected == 3
 							? 'bg-indigo-800 text-white'
 							: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+						sveltekit:prefetch
 					>
 						<!-- Heroicon name: outline/calendar -->
 						<svg
@@ -348,6 +355,7 @@
 						class="{selected == 4
 							? 'bg-indigo-800 text-white'
 							: 'text-white hover:bg-indigo-600 hover:bg-opacity-75'} group flex items-center px-2 py-2 text-base font-medium rounded-md"
+						sveltekit:prefetch
 					>
 						<!-- Heroicon name: outline/chart-bar -->
 						<svg
@@ -369,7 +377,7 @@
 					</a>
 				</nav>
 			</div>
-			<div class='py-2 cursor-pointer select-none'>
+			<div class="py-2 cursor-pointer select-none">
 				<div
 					on:click={() => {
 						let app = getApp('PantryBook');
@@ -379,8 +387,19 @@
 					class="text-white hover:bg-indigo-600 hover:bg-opacity-75 group flex items-center px-2 py-2 text-base font-medium rounded-md"
 				>
 					<!-- Heroicon name: outline/calendar -->
-					<svg xmlns="http://www.w3.org/2000/svg" class="mr-4 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="mr-4 h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+						/>
 					</svg>
 					Logout
 				</div>
