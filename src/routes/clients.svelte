@@ -1,16 +1,19 @@
 <script>
 	import Sidebar from '../lib/Components/Sidebar.svelte';
-	import { setDoc, doc, onSnapshot, getFirestore, collection } from 'firebase/firestore';
+	import { setDoc, doc, onSnapshot, getFirestore, collection, addDoc } from 'firebase/firestore';
 	import { getApp } from 'firebase/app';
 	import { onMount } from 'svelte';
 	import Modal from '../lib/Components/Modal.svelte';
 	import FormFieldText from '../lib/Components/FormFieldText.svelte';
+	import FormFieldSelect from '../lib/Components/FormFieldSelect.svelte';
+
+	import Datepicker from 'svelte-calendar';
 
 	function sleep(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
-	let clientsPage = true;
+	let clientsTab = true;
 
 	//The term being searched.
 	let searchTerm;
@@ -26,6 +29,10 @@
 	let selectedUser = null;
 
 	let clients = [];
+
+	//The selected date for the visits page.
+	let selectedDate;
+	let dateChosen = false;
 
 	function paginate(input, pagesize) {
 		let arr = [];
@@ -44,7 +51,6 @@
 
 		//Invoked whenever a client of the organization changes.
 		onSnapshot(collection(db, 'orgs/sfp/clients'), async (e) => {
-			console.log('snapshot update!');
 			clients = [];
 			e.docs.forEach((doc) => {
 				//Todo: include ID in document and check if the document is the current document, incurring an update.
@@ -76,34 +82,8 @@
 				<dl class="divide-y divide-gray-200">
 					<FormFieldText name="Phone" bind:value={selectedUser.phone} on:update={updateClient} />
 					<FormFieldText name="Email" bind:value={selectedUser.email} on:update={updateClient} />
-					<div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:pt-5">
-						<dt class="text-sm font-medium text-gray-500">Veteran</dt>
-						<dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-							<span class="flex-grow">Yes</span>
-							<span class="ml-4 flex-shrink-0">
-								<button
-									type="button"
-									class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-								>
-									Update
-								</button>
-							</span>
-						</dd>
-					</div>
-					<div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-b sm:border-gray-200">
-						<dt class="text-sm font-medium text-gray-500">Household Revenue</dt>
-						<dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-							<span class="flex-grow">100k/yr</span>
-							<span class="ml-4 flex-shrink-0">
-								<button
-									type="button"
-									class="bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-								>
-									Update
-								</button>
-							</span>
-						</dd>
-					</div>
+					<FormFieldSelect name='Veteran' bind:value={selectedUser.vet} on:update={updateClient} options={['Yes', 'No']}/>
+					<FormFieldSelect name='Household Revenue' bind:value={selectedUser.revenue} on:update={updateClient} options={['<20k/yr', '20-40k/yr', '40-60k/yr', '60-80k/yr', '80+k/yr']}/>
 				</dl>
 			</div>
 		</div>
@@ -111,9 +91,9 @@
 {/if}
 
 <!-- This example requires Tailwind CSS v2.0+ -->
-<div class="h-screen flex overflow-hidden bg-gray-100">
+<div class="h-screen flex overflow-visible bg-gray-100">
 	<Sidebar selected={1} />
-	<div class="flex flex-col w-0 flex-1 overflow-hidden">
+	<div class="flex flex-col w-0 flex-1">
 		<div class="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
 			<button
 				class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
@@ -137,7 +117,7 @@
 				</svg>
 			</button>
 		</div>
-		<main class="flex-1 relative z-0 overflow-y-auto focus:outline-none">
+		<main class="flex-1 relative z-0 focus:outline-none">
 			<div class="py-6">
 				<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
 					<div>
@@ -159,9 +139,9 @@
 									<!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
 									<div
 										on:click={() => {
-											clientsPage = true;
+											clientsTab = true;
 										}}
-										class={clientsPage == true
+										class={clientsTab == true
 											? ' cursor-pointer select-none border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
 											: ' cursor-pointer select-none border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'}
 									>
@@ -170,9 +150,9 @@
 
 									<div
 										on:click={() => {
-											clientsPage = false;
+											clientsTab = false;
 										}}
-										class={clientsPage == false
+										class={clientsTab == false
 											? '  cursor-pointer select-none  border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
 											: '  cursor-pointer select-none border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'}
 									>
@@ -183,12 +163,12 @@
 						</div>
 					</div>
 				</div>
-				{#if clientsPage}
+				{#if clientsTab}
 					<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-8">
 						<div class="flex flex-col">
-							<div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+							<div class="-my-2  sm:-mx-6 lg:-mx-8">
 								<div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-									<div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+									<div class="shadowborder-b border-gray-200 sm:rounded-lg">
 										<div class="flex">
 											<div class="px-8 py-6 mx-4 flex-auto">
 												<label for="search" class="block text-sm font-medium text-gray-700"
@@ -241,7 +221,7 @@
 											</button>
 										</div>
 
-										{#if clients.length > 0}
+										{#if clients.length > 2}
 											<table class="min-w-full divide-y divide-gray-200">
 												<thead class="bg-gray-50">
 													<tr>
@@ -323,7 +303,7 @@
 															<span class="font-medium">{page * pagesize + pages[page].length}</span
 															>
 															of
-															<span class="font-medium">{pages.length * pagesize}</span>
+															<span class="font-medium">{((pages.length - 1) * pagesize) + pages[pages.length - 1].length}</span>
 															results
 														</p>
 													</div>
@@ -358,18 +338,145 @@
 						</div>
 					</div>
 				{:else}
-					<div class="py-6">
-						<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-							<h1 class="text-2xl font-semibold text-gray-900">Visits</h1>
-						</div>
-						<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-							<!-- Replace with your content -->
-							<div class="py-4">
-								<div class="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+						<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-8">
+							<div class="flex flex-col">
+								<div class="-my-2 sm:-mx-6 lg:-mx-8">
+									<div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+										<div class="shadow border-b border-gray-200 sm:rounded-lg">
+											<div class="flex mb-4">
+												<div class="px-8 py-6 mx-4 flex-auto">
+													<Datepicker bind:selected={selectedDate} bind:dateChosen={dateChosen}>
+														<button type="button" class="mt-4 ml-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+															{dateChosen ? 'Selected Date:' : 'Filter Date'}
+														</button>
+													</Datepicker>
+												</div>
+												<button
+													type="button"
+													class="mr-8 mt-12 h-8 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+												>
+													Record Visit
+												</button>
+											</div>
+
+											{selectedDate}
+
+											{#if clients.length > 2}
+												<table class="min-w-full divide-y divide-gray-200">
+													<thead class="bg-gray-50">
+													<tr>
+														<th
+															scope="col"
+															class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+														>
+															Name
+														</th>
+														<th
+															scope="col"
+															class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+														>
+															Phone Number
+														</th>
+														<th
+															scope="col"
+															class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+														>
+															Household Revenue
+														</th>
+														<th
+															scope="col"
+															class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+														>
+															# of Visits
+														</th>
+														<th scope="col" class="relative px-6 py-3 cursor-pointer select-none">
+															<span class="sr-only ">View</span>
+														</th>
+													</tr>
+													</thead>
+													<tbody>
+													<!-- Odd row -->
+													{#each pages[page] as user}
+														<tr class="even:bg-white odd:bg-gray-80">
+															<td
+																class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+															>
+																{user.name}
+															</td>
+															<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+																{user.phone}
+															</td>
+															<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+																{user.revenue}
+															</td>
+															<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+																{user.visits}
+															</td>
+															<td
+																class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+															>
+																<div
+																	class="text-indigo-600 hover:text-indigo-900 cursor-pointer select-none"
+																	on:click={() => {
+																		selectedUser = user;
+																	}}
+																>
+																	View
+																</div>
+															</td>
+														</tr>
+													{/each}
+
+													<!-- More people... -->
+													</tbody>
+												</table>
+												{#if pages.length > 1}
+													<nav
+														class="bg-white px-4 py-3 flex select-none items-center justify-between border-t border-gray-200 sm:px-6"
+														aria-label="Pagination"
+													>
+														<div class="hidden sm:block">
+															<p class="text-sm text-gray-700">
+																Showing
+																<span class="font-medium">{page * pagesize + 1}</span>
+																to
+																<span class="font-medium">{page * pagesize + pages[page].length}</span
+																>
+																of
+																<span class="font-medium">{((pages.length - 1) * pagesize) + pages[pages.length - 1].length}</span>
+																results
+															</p>
+														</div>
+														<div class="flex-1 flex justify-between sm:justify-end">
+															<div
+																class="relative inline-flex cursor-pointer select-none items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+																on:click={() => {
+																if (page > 0) {
+																	page--;
+																}
+															}}
+															>
+																Previous
+															</div>
+															<div
+																class="ml-3 relative cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+																on:click={() => {
+																if (page < pages.length - 1) {
+																	page++;
+																}
+															}}
+															>
+																Next
+															</div>
+														</div>
+													</nav>
+												{/if}
+											{/if}
+										</div>
+									</div>
+								</div>
 							</div>
-							<!-- /End replace -->
 						</div>
-					</div>
 				{/if}
 			</div>
 		</main>

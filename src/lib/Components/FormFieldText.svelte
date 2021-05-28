@@ -23,7 +23,7 @@
 					name="email"
 					id="email"
 					bind:value
-					class="w-52 h-9 px-1 py-1 my-auto shadow-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-600 rounded-md"
+					class="w-52 h-9 px-1 py-1 my-auto shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md"
 					placeholder={value}
 				/>
 			</div>

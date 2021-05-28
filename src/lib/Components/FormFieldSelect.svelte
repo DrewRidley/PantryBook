@@ -22,7 +22,7 @@
 					bind:value
 					id="location"
 					name="location"
-					class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-indigo-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+					class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-grey-200 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
 				>
 					{#each options as opt}
 						<option>{opt}</option>

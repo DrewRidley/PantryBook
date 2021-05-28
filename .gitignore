@@ -7,3 +7,4 @@ node_modules
 /.vercel_build_output
 /myApp
 .firebaserc
+/.svelte-kit
