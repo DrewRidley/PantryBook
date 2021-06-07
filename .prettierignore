@@ -6,3 +6,4 @@
 **/.vercel_build_output/**
 **/build/**
 **/functions/**
+**/.svelte-kit/**

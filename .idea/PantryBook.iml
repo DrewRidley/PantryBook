@@ -7,6 +7,10 @@
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/.svelte" />
       <excludeFolder url="file://$MODULE_DIR$/.vercel_build_output" />
+      <excludeFolder url="file://$MODULE_DIR$/.svelte-kit" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/functions" />
+      <excludeFolder url="file://$MODULE_DIR$/myApp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
