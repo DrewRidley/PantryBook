@@ -1,4 +1,4 @@
-<h1 class="title">Your mom</h1>
+<h1>Testing cloudflare...</h1>
 
 <style>
 	.title {
