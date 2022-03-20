@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Card from "@smui/card";
   import Textfield from "@smui/textfield";
   import HelperText from "@smui/textfield/helper-text";
   import Button from "@smui/button";
   import Select, { Option } from "@smui/select";
-  import FormField from "@smui/form-field";
-  import Paper, { Title, Subtitle, Content } from "@smui/paper";
+  import Paper, { Title, Content } from "@smui/paper";
   import { countryList } from "$lib/constants";
+  import { connected } from "$lib/stores";
+  import { goto } from "$app/navigation";
 
   let pantry = {
     name: "",
@@ -20,10 +20,13 @@
     password: "",
   };
 
-  const register = async () => {};
+  const register = async () => {
+    connected.set(true);
+    goto("/");
+  };
 </script>
 
-<div class="flex mt-10 justify-center">
+<div class="flex flex-1 mt-10 justify-center">
   <div class="w-1/2">
     <h1 class="mdc-typography--headline4 mb-5">Register your food pantry</h1>
     <Paper>

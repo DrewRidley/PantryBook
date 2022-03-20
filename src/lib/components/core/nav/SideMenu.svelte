@@ -1,6 +1,7 @@
 <script lang="ts">
   import List, { Item, Graphic, Text } from "@smui/list";
   import { goto } from "$app/navigation";
+  import { connected } from "$lib/stores";
 </script>
 
 <div class="flex flex-col justify-between">
@@ -38,7 +39,11 @@
       <Text>Visits</Text>
     </Item>
   </List>
-  <Item on:SMUI:action={() => {}}>
+  <Item
+    on:SMUI:action={() => {
+      connected.set(false);
+    }}
+  >
     <Graphic class="material-icons">power_settings_new</Graphic>
     <Text>Sign out</Text>
   </Item>

@@ -1,10 +1,9 @@
 <script lang="ts">
   import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
-  import IconButton from "@smui/icon-button";
   import Button, { Label } from "@smui/button";
   import type { MenuComponentDev } from "@smui/menu";
   import Menu from "@smui/menu";
-  import List, { Item, Separator, Text } from "@smui/list";
+  import List from "@smui/list";
   import { connected } from "$lib/stores";
   import { goto } from "$app/navigation";
 
@@ -29,7 +28,7 @@
           </Button>
           <Menu bind:this={menu}>
             <List>
-              <Item on:SMUI:action={() => {}}>
+              <!--  <Item on:SMUI:action={() => {}}>
                 <Text>Cut</Text>
               </Item>
               <Item on:SMUI:action={() => {}}>
@@ -41,7 +40,7 @@
               <Separator />
               <Item on:SMUI:action={() => {}}>
                 <Text>Delete</Text>
-              </Item>
+              </Item> -->
             </List>
           </Menu>
         </div>
