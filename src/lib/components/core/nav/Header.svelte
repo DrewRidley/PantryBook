@@ -14,7 +14,12 @@
 <TopAppBar variant="static">
   <Row>
     <Section>
-      <Title>Food Pantry</Title>
+      <Title
+        class="cursor-pointer"
+        on:click={() => {
+          goto("/");
+        }}>Food Pantry</Title
+      >
     </Section>
     <Section align="end" toolbar>
       {#if $connected}
