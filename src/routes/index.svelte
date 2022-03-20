@@ -1,7 +1,9 @@
 <script lang="ts">
-  import Button, { Label } from "@smui/button";
-
-  let connected = true;
+  import { connected } from "$lib/stores";
 </script>
 
-{#if connected}Home{:else}Landing{/if}
+{#if $connected}
+  Dashboard
+{:else}
+  Landing
+{/if}

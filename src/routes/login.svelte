@@ -1,12 +1,7 @@
 <script lang="ts">
   import Card from "@smui/card";
   import Textfield from "@smui/textfield";
-  import HelperText from "@smui/textfield/helper-text";
   import Button from "@smui/button";
-  import Select, { Option } from "@smui/select";
-  import FormField from "@smui/form-field";
-  import Paper, { Title, Subtitle, Content } from "@smui/paper";
-  import { countryList } from "$lib/constants";
 
   let email = "";
   let password = "";
