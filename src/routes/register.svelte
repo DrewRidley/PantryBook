@@ -25,7 +25,7 @@
 
 <div class="flex mt-10 justify-center">
   <div class="w-1/2">
-    <h1 class="mdc-typography--headline3 mb-5">Register your food pantry</h1>
+    <h1 class="mdc-typography--headline4 mb-5">Register your food pantry</h1>
     <Paper>
       <Title>Pantry info</Title>
       <Content
