@@ -1,8 +1,7 @@
-<h1>Testing cloudflare...</h1>
+<script lang="ts">
+  import Button, { Label } from "@smui/button";
 
-<style>
-	.title {
-		padding-top: 2rem;
-		font-size: larger;
-	}
-</style>
+  let connected = true;
+</script>
+
+{#if connected}Home{:else}Landing{/if}
