@@ -56,7 +56,12 @@
         <Textfield class="w-1/3" bind:value={owner.name} label="Name">
           <HelperText slot="helper" />
         </Textfield>
-        <Textfield class="w-1/3" bind:value={owner.email} label="Email">
+        <Textfield
+          type="email"
+          class="w-1/3"
+          bind:value={owner.email}
+          label="Email"
+        >
           <HelperText slot="helper">This will be your owner email</HelperText>
         </Textfield>
         <Textfield

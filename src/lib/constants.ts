@@ -1,3 +1,14 @@
+export const mockClients: any[] = [
+  {
+    name: "John Doe",
+    dob: new Date(1973, 8, 21),
+    email: "john@doe.com",
+    householdIncome: 100000,
+    householdSize: 3,
+    visits: [],
+  },
+];
+
 export const countryList = [
   "Afghanistan",
   "Albania",

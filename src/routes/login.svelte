@@ -18,8 +18,13 @@
   <div class="w-1/4 mt-10">
     <h1 class="mdc-typography--headline4 mb-5">Log in to your account</h1>
     <Card padded>
-      <Textfield class="w-full" bind:value={email} label="Email" />
-      <Textfield class="w-full" bind:value={password} label="Password" />
+      <Textfield type="email" class="w-full" bind:value={email} label="Email" />
+      <Textfield
+        type="password"
+        class="w-full"
+        bind:value={password}
+        label="Password"
+      />
     </Card>
 
     <div class="flex justify-center mt-5">
