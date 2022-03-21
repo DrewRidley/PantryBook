@@ -10,7 +10,7 @@
 
   const login = async () => {
     connected.set(true);
-    goto("/");
+    await goto("/");
   };
 </script>
 

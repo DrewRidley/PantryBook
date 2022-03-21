@@ -22,7 +22,7 @@
 
   const register = async () => {
     connected.set(true);
-    goto("/");
+    await goto("/");
   };
 </script>
 
