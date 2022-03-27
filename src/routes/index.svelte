@@ -1,8 +1,9 @@
-<h1>Testing cloudflare...</h1>
+<script lang="ts">
+  import { connected } from "$lib/stores";
+</script>
 
-<style>
-	.title {
-		padding-top: 2rem;
-		font-size: larger;
-	}
-</style>
+{#if $connected}
+  Dashboard
+{:else}
+  Landing
+{/if}

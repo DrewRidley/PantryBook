@@ -60,7 +60,7 @@
 
 ### How is it free?
 
-PantryBook is free because of generous contributions from organizations.
+PantryBook is free thanks to generous contributions from organizations.
 PantryBook is a minimalistic service
 that uses the least possible compute possible.
 We only use the resources we require.
