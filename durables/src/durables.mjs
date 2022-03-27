@@ -1,3 +1,4 @@
+
 export class User {
     constructor(state, env) {
         this.state = state;
@@ -25,3 +26,10 @@ export class User {
     }
 }
 
+
+
+export default {
+    fetch() {
+        return new Response("This worker instantiates the durable objects for PantryBook.")
+    }
+}
